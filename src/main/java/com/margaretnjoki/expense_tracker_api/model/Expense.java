@@ -33,4 +33,6 @@ public class Expense {
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private Instant createdAt;
+
+    private String note;
 }
