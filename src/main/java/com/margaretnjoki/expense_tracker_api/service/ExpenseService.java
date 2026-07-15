@@ -3,6 +3,7 @@ package com.margaretnjoki.expense_tracker_api.service;
 import com.margaretnjoki.expense_tracker_api.ExpenseTrackerApiApplication;
 import com.margaretnjoki.expense_tracker_api.dto.CreateExpenseRequest;
 import com.margaretnjoki.expense_tracker_api.dto.ExpenseResponse;
+import com.margaretnjoki.expense_tracker_api.dto.PagedResponse;
 import com.margaretnjoki.expense_tracker_api.dto.UpdateExpenseRequest;
 import com.margaretnjoki.expense_tracker_api.exception.ResourceNotFoundException;
 import com.margaretnjoki.expense_tracker_api.model.Category;
@@ -39,10 +40,33 @@ public class ExpenseService {
         return expenseRepository.findAllWithCategoryByUserId(DEMO_USER_ID);
     }
 
-    public Page<Expense> findAll(Pageable pageable){
-        return expenseRepository.findByUserId(DEMO_USER_ID, pageable);
-    }
+    public PagedResponse<ExpenseResponse> findAll(
+            LocalDate from,
+            LocalDate to,
+            Pageable pageable
+    ) {
 
+        Page<Expense> page;
+
+        if (from != null && to != null) {
+
+            page = expenseRepository.findByUserIdAndOccurredOnBetween(
+                    DEMO_USER_ID,
+                    from,
+                    to,
+                    pageable
+            );
+
+        } else {
+
+            page = expenseRepository.findByUserId(
+                    DEMO_USER_ID,
+                    pageable
+            );
+        }
+
+        return PagedResponse.from(page, ExpenseResponse::from);
+    }
     public Expense create(CreateExpenseRequest req) {
         User user = userRepository.findById(DEMO_USER_ID).orElseThrow();
         Category category = null;

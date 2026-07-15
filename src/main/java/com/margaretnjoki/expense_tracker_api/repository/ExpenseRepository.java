@@ -27,6 +27,14 @@ List<Expense> findByUserIdAndOccurredOnBetween(UUID userId, LocalDate from,Local
 @EntityGraph(attributePaths = "category")
     Page<Expense> findByUserId(UUID userId, Pageable pageable);
 
+    @EntityGraph(attributePaths = {"category"})
+    Page<Expense> findByUserIdAndOccurredOnBetween(
+            UUID userId,
+            LocalDate from,
+            LocalDate to,
+            Pageable pageable
+    );
+
 
 
 }

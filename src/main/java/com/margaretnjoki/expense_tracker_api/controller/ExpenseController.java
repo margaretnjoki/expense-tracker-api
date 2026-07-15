@@ -23,9 +23,13 @@ public class ExpenseController {
     }
 
     @GetMapping
-    public PagedResponse<ExpenseResponse> list(Pageable pageable){
-        Page<Expense> page= service.findAll(pageable);
-        return PagedResponse.from(page, ExpenseResponse::from);
+    public PagedResponse<ExpenseResponse> list(
+            @RequestParam(required = false) LocalDate from,
+            @RequestParam(required = false) LocalDate to,
+            Pageable pageable
+    ) {
+
+        return service.findAll(from, to, pageable);
     }
 
     @GetMapping("/filter")
