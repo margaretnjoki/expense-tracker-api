@@ -2,8 +2,10 @@ package com.margaretnjoki.expense_tracker_api.controller;
 
 import com.margaretnjoki.expense_tracker_api.dto.CategoryResponse;
 import com.margaretnjoki.expense_tracker_api.dto.CreateCategoryRequest;
+import com.margaretnjoki.expense_tracker_api.dto.PagedResponse;
 import com.margaretnjoki.expense_tracker_api.service.CategoryService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,8 +22,8 @@ public class CategoryController {
     }
 
     @GetMapping
-    public List<CategoryResponse>  list(){
-        return service.findAll().stream().map(CategoryResponse ::from).toList();
+    public PagedResponse<CategoryResponse> list(Pageable pageable) {
+        return service.findAll(pageable);
     }
 
     @PostMapping

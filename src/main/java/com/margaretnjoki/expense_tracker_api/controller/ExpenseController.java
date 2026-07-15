@@ -1,11 +1,11 @@
 package com.margaretnjoki.expense_tracker_api.controller;
 
-import com.margaretnjoki.expense_tracker_api.dto.CreateExpenseRequest;
-import com.margaretnjoki.expense_tracker_api.dto.ExpenseResponse;
-import com.margaretnjoki.expense_tracker_api.dto.TotalExpenseResponse;
-import com.margaretnjoki.expense_tracker_api.dto.UpdateExpenseRequest;
+import com.margaretnjoki.expense_tracker_api.dto.*;
+import com.margaretnjoki.expense_tracker_api.model.Expense;
 import com.margaretnjoki.expense_tracker_api.service.ExpenseService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,8 +23,9 @@ public class ExpenseController {
     }
 
     @GetMapping
-    public List<ExpenseResponse> list(){
-        return service.findAll().stream().map(ExpenseResponse::from).toList();
+    public PagedResponse<ExpenseResponse> list(Pageable pageable){
+        Page<Expense> page= service.findAll(pageable);
+        return PagedResponse.from(page, ExpenseResponse::from);
     }
 
     @GetMapping("/filter")

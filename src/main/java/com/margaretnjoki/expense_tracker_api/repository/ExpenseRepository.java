@@ -1,6 +1,9 @@
 package com.margaretnjoki.expense_tracker_api.repository;
 
 import com.margaretnjoki.expense_tracker_api.model.Expense;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -20,6 +23,9 @@ List<Expense> findByUserIdAndOccurredOnBetween(UUID userId, LocalDate from,Local
 
 @Query("SELECT e FROM Expense e LEFT JOIN FETCH e.category WHERE e.user.id = :userId")
   List<Expense> findAllWithCategoryByUserId(@Param("userId") UUID userId);
+
+@EntityGraph(attributePaths = "category")
+    Page<Expense> findByUserId(UUID userId, Pageable pageable);
 
 
 

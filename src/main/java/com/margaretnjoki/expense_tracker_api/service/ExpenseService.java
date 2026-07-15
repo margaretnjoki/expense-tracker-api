@@ -11,6 +11,8 @@ import com.margaretnjoki.expense_tracker_api.model.User;
 import com.margaretnjoki.expense_tracker_api.repository.CategoryRepository;
 import com.margaretnjoki.expense_tracker_api.repository.ExpenseRepository;
 import com.margaretnjoki.expense_tracker_api.repository.UserRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -35,6 +37,10 @@ public class ExpenseService {
 
     public List<Expense> findAll() {
         return expenseRepository.findAllWithCategoryByUserId(DEMO_USER_ID);
+    }
+
+    public Page<Expense> findAll(Pageable pageable){
+        return expenseRepository.findByUserId(DEMO_USER_ID, pageable);
     }
 
     public Expense create(CreateExpenseRequest req) {

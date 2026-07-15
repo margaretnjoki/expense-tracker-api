@@ -1,11 +1,15 @@
 package com.margaretnjoki.expense_tracker_api.service;
 
+import com.margaretnjoki.expense_tracker_api.dto.CategoryResponse;
 import com.margaretnjoki.expense_tracker_api.dto.CreateCategoryRequest;
+import com.margaretnjoki.expense_tracker_api.dto.PagedResponse;
 import com.margaretnjoki.expense_tracker_api.exception.ResourceNotFoundException;
 import com.margaretnjoki.expense_tracker_api.model.Category;
 import com.margaretnjoki.expense_tracker_api.model.User;
 import com.margaretnjoki.expense_tracker_api.repository.CategoryRepository;
 import com.margaretnjoki.expense_tracker_api.repository.UserRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,10 +25,15 @@ private final UserRepository userRepository;
         this.userRepository = userRepository;
     }
 
-    public List<Category> findAll(){
-        return categoryRepository.findByUserId(DEMO_USER_ID);
-    }
+    public PagedResponse<CategoryResponse> findAll(Pageable pageable) {
 
+        Page<Category> page = categoryRepository.findByUserId(
+                DEMO_USER_ID,
+                pageable
+        );
+
+        return PagedResponse.from(page, CategoryResponse::from);
+    }
     public Category findById(UUID id){
         return categoryRepository.findByIdAndUserId(id,DEMO_USER_ID)
                 .orElseThrow(() -> new ResourceNotFoundException("category", id));
