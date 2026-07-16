@@ -74,4 +74,12 @@ public class ExpenseController {
 
         return service.findCategoriesWithTotalGreaterThan(min);
     }
+
+    @GetMapping("/reports/summary")
+    public SummaryReportResponse summary(
+            @RequestParam LocalDate from,
+            @RequestParam LocalDate to) {
+
+        return service.getSummaryReport(from, to);
+    }
 }

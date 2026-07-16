@@ -1,10 +1,7 @@
 package com.margaretnjoki.expense_tracker_api.service;
 
 import com.margaretnjoki.expense_tracker_api.ExpenseTrackerApiApplication;
-import com.margaretnjoki.expense_tracker_api.dto.CreateExpenseRequest;
-import com.margaretnjoki.expense_tracker_api.dto.ExpenseResponse;
-import com.margaretnjoki.expense_tracker_api.dto.PagedResponse;
-import com.margaretnjoki.expense_tracker_api.dto.UpdateExpenseRequest;
+import com.margaretnjoki.expense_tracker_api.dto.*;
 import com.margaretnjoki.expense_tracker_api.exception.ResourceNotFoundException;
 import com.margaretnjoki.expense_tracker_api.model.Category;
 import com.margaretnjoki.expense_tracker_api.model.Expense;
@@ -127,6 +124,16 @@ public class ExpenseService {
 
     public List<Object[]> findCategoriesWithTotalGreaterThan(BigDecimal min) {
         return expenseRepository.findCategoriesWithTotalGreaterThan(min);
+    }
+
+    public SummaryReportResponse getSummaryReport(
+            LocalDate from,
+            LocalDate to) {
+
+        return expenseRepository.getSummaryReport(DEMO_USER_ID,
+                from,
+                to
+        );
     }
 
 }

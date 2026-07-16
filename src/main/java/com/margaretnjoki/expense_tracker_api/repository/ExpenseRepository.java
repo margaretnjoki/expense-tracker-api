@@ -1,6 +1,7 @@
 package com.margaretnjoki.expense_tracker_api.repository;
 
 import com.margaretnjoki.expense_tracker_api.dto.CategoryTotalResponse;
+import com.margaretnjoki.expense_tracker_api.dto.SummaryReportResponse;
 import com.margaretnjoki.expense_tracker_api.model.Expense;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -66,5 +67,20 @@ long countByUserIdAndOccurredOnBetween(UUID userId, LocalDate from, LocalDate to
 """)
     List<Object[]> findCategoriesWithTotalGreaterThan(
             @Param("min") BigDecimal min);
+
+    @Query("""
+SELECT new com.margaretnjoki.expense_tracker_api.dto.SummaryReportResponse(
+    COALESCE(SUM(e.amountKes), 0.0),
+    COUNT(e),
+    COALESCE(AVG(e.amountKes), 0.0)
+)
+FROM Expense e
+WHERE e.user.id = :userId
+AND e.occurredOn BETWEEN :from AND :to
+""")
+    SummaryReportResponse getSummaryReport(
+            @Param("userId") UUID userId,
+            @Param("from") LocalDate from,
+            @Param("to") LocalDate to);
 
     }
