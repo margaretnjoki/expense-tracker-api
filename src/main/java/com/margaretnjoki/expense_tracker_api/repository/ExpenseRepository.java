@@ -1,5 +1,6 @@
 package com.margaretnjoki.expense_tracker_api.repository;
 
+import com.margaretnjoki.expense_tracker_api.dto.CategoryTotalResponse;
 import com.margaretnjoki.expense_tracker_api.model.Expense;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -35,6 +36,26 @@ List<Expense> findByUserIdAndOccurredOnBetween(UUID userId, LocalDate from,Local
             Pageable pageable
     );
 
+    @Query("""
+SELECT new com.margaretnjoki.expense_tracker_api.dto.CategoryTotalResponse(
+COALESCE(c.name, 'Uncategorised'), SUM(e.amountKes))
+FROM Expense e
+LEFT JOIN e.category c
+WHERE e.user.id = :userId
+AND e.occurredOn BETWEEN :from AND :to
+GROUP BY c.name
+ORDER BY SUM (e.amountKes) DESC
+""")
+    List<CategoryTotalResponse> totalByCategory(@Param("userId") UUID userId,
+                                                @Param("from")LocalDate from,
+                                                @Param("to") LocalDate to);
 
+@Query("SELECT COALESCE(SUM(e.amountKes), 0) FROM Expense e " +
+        "WHERE e.user.id = :userId AND e.occurredOn BETWEEN :from AND :to")
+  BigDecimal totalBetween(@Param("userId") UUID userId,
+                          @Param("from") LocalDate from,
+                          @Param("to") LocalDate to);
+
+long countByUserIdAndOccurredOnBetween(UUID userId, LocalDate from, LocalDate to);
 
 }
