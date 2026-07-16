@@ -125,4 +125,8 @@ public class ExpenseService {
         expenseRepository.delete(expense);
     }
 
+    public List<Object[]> findCategoriesWithTotalGreaterThan(BigDecimal min) {
+        return expenseRepository.findCategoriesWithTotalGreaterThan(min);
+    }
+
 }

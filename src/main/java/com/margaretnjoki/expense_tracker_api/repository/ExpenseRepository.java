@@ -58,4 +58,13 @@ ORDER BY SUM (e.amountKes) DESC
 
 long countByUserIdAndOccurredOnBetween(UUID userId, LocalDate from, LocalDate to);
 
-}
+    @Query("""
+    SELECT e.category.name, SUM(e.amountKes)
+    FROM Expense e
+    GROUP BY e.category.name
+    HAVING SUM(e.amountKes) > :min
+""")
+    List<Object[]> findCategoriesWithTotalGreaterThan(
+            @Param("min") BigDecimal min);
+
+    }

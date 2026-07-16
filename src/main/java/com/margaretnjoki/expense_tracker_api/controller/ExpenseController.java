@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
@@ -65,5 +66,12 @@ public class ExpenseController {
     public void delete(@PathVariable UUID id){
         service.delete(id);
 
+    }
+
+    @GetMapping("/reports/categories")
+    public List<Object[]> categoryReport(
+            @RequestParam BigDecimal min) {
+
+        return service.findCategoriesWithTotalGreaterThan(min);
     }
 }
