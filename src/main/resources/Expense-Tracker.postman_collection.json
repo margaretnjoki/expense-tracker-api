@@ -1,0 +1,276 @@
+{
+  "info": {
+    "_postman_id": "b0aad7a7-3469-4f0f-bf07-96bb76e4039e",
+    "name": "Expense-Tracker",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "55407393",
+    "_collection_link": "https://go.postman.co/collection/55407393-b0aad7a7-3469-4f0f-bf07-96bb76e4039e?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "create category",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"name\" : \"painting\",\r\n    \"color\" : \"blue\"\r\n\r\n    \r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/v1/categories",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "categories"
+          ],
+          "query": [
+            {
+              "key": "name",
+              "value": "clothes",
+              "disabled": true
+            },
+            {
+              "key": "color",
+              "value": "green",
+              "disabled": true
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "create expense",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"amountKes\" : \"2000.0\",\r\n    \"description\" : \"money for painting\",\r\n    \"occurredOn\" : \"2026-07-16\",\r\n    \"categoryId\" : \"e73c76e1-7442-4de6-b190-0d8f404462be\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/v1/expenses",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "expenses"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "retrieve expense: page: 0, size: 2",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/expenses?page=0&size=2",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "expenses"
+          ],
+          "query": [
+            {
+              "key": "page",
+              "value": "0",
+              "type": "text"
+            },
+            {
+              "key": "size",
+              "value": "2",
+              "type": "text"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "retrieve expenses in amountKes desc",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "?sort=amountKes, desc",
+          "query": [
+            {
+              "key": "sort",
+              "value": "amountKes, desc",
+              "type": "text"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "retrieve reports monthly",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/reports/monthly?year=2026&month=7",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "reports",
+            "monthly"
+          ],
+          "query": [
+            {
+              "key": "year",
+              "value": "2026",
+              "type": "text"
+            },
+            {
+              "key": "month",
+              "value": "7",
+              "type": "text"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "retrieving reports by-category and range",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/reports/by-category?from=2026-01-01&to=2026-10-10",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "reports",
+            "by-category"
+          ],
+          "query": [
+            {
+              "key": "from",
+              "value": "2026-01-01",
+              "type": "text"
+            },
+            {
+              "key": "to",
+              "value": "2026-10-10",
+              "type": "text"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "updating the expense",
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"amountKes\" : \"400\",\r\n    \"description\": \"red\",\r\n    \"occurredOn\": \"2026-07-08\",\r\n     \"categoryName\": \"enjoyment\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/v1/expenses/9d6643e4-726d-4c64-aa84-7c742a9a2c5b",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "expenses",
+            "9d6643e4-726d-4c64-aa84-7c742a9a2c5b"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "retrieving all expenses",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/expenses",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "expenses"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "delete an expense",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/v1/expenses/2a85ba58-c5fa-49df-a59a-1e964e97af46",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "v1",
+            "expenses",
+            "2a85ba58-c5fa-49df-a59a-1e964e97af46"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
