@@ -37,4 +37,10 @@ public class GlobalExceptionHandler {
     public Map<String, Object> handleBadRequest(BadRequestException ex) {
         return Map.of("error", ex.getMessage());
     }
+
+    @ExceptionHandler(EmailAlreadyInUseException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public Map<String, Object> handleEmailInUse(EmailAlreadyInUseException ex) {
+        return Map.of("error", ex.getMessage());
+    }
 }
