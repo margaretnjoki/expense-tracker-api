@@ -8,6 +8,7 @@ import com.margaretnjoki.expense_tracker_api.model.Category;
 import com.margaretnjoki.expense_tracker_api.model.User;
 import com.margaretnjoki.expense_tracker_api.repository.CategoryRepository;
 import com.margaretnjoki.expense_tracker_api.repository.UserRepository;
+import com.margaretnjoki.expense_tracker_api.security.CurrentUserProvider;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -16,31 +17,35 @@ import java.util.List;
 import java.util.UUID;
 @Service
 public class CategoryService {
-    private static final UUID DEMO_USER_ID = UUID.fromString("11111111-1111-1111-1111-111111111111");
 private final CategoryRepository categoryRepository;
 private final UserRepository userRepository;
+private final CurrentUserProvider currentUserProvider;
 
-    public CategoryService(CategoryRepository categoryRepository, UserRepository userRepository) {
+    public CategoryService(CategoryRepository categoryRepository, UserRepository userRepository, CurrentUserProvider currentUserProvider) {
         this.categoryRepository = categoryRepository;
         this.userRepository = userRepository;
+        this.currentUserProvider = currentUserProvider;
     }
 
     public PagedResponse<CategoryResponse> findAll(Pageable pageable) {
-
+        UUID userId= currentUserProvider.getCurrentUser().getId();
         Page<Category> page = categoryRepository.findByUserId(
-                DEMO_USER_ID,
+                userId,
                 pageable
         );
 
         return PagedResponse.from(page, CategoryResponse::from);
     }
     public Category findById(UUID id){
-        return categoryRepository.findByIdAndUserId(id,DEMO_USER_ID)
+        UUID userId= currentUserProvider.getCurrentUser().getId();
+
+        return categoryRepository.findByIdAndUserId(id,userId)
                 .orElseThrow(() -> new ResourceNotFoundException("category", id));
     }
 
     public Category create(CreateCategoryRequest req){
-        User user = userRepository.findById(DEMO_USER_ID).orElseThrow();
+        UUID userId= currentUserProvider.getCurrentUser().getId();
+        User user = userRepository.findById(userId).orElseThrow();
         Category category= Category.builder()
                 .user(user)
                 .name(req.name())

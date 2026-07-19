@@ -29,4 +29,8 @@ server:
   servlet:
     context-path: /api/v1
 
+jwt:
+  secret: "change-this-to-a-long-random-string-at-least-32-characters-please"
+  expiration-ms: 36600000
+
 

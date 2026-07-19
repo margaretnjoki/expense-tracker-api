@@ -9,6 +9,7 @@ import com.margaretnjoki.expense_tracker_api.model.User;
 import com.margaretnjoki.expense_tracker_api.repository.CategoryRepository;
 import com.margaretnjoki.expense_tracker_api.repository.ExpenseRepository;
 import com.margaretnjoki.expense_tracker_api.repository.UserRepository;
+import com.margaretnjoki.expense_tracker_api.security.CurrentUserProvider;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -21,20 +22,22 @@ import java.util.UUID;
 
 @Service
 public class ExpenseService {
-    private static final UUID DEMO_USER_ID = UUID.fromString("11111111-1111-1111-1111-111111111111");
 
     private final ExpenseRepository expenseRepository;
     private final CategoryRepository categoryRepository;
     private final UserRepository userRepository;
+    private final CurrentUserProvider currentUserProvider;
 
-    public ExpenseService(ExpenseRepository expenseRepository, CategoryRepository categoryRepository, UserRepository userRepository) {
+    public ExpenseService(ExpenseRepository expenseRepository, CategoryRepository categoryRepository, UserRepository userRepository, CurrentUserProvider currentUserProvider) {
         this.expenseRepository = expenseRepository;
         this.categoryRepository = categoryRepository;
         this.userRepository = userRepository;
+        this.currentUserProvider = currentUserProvider;
     }
 
     public List<Expense> findAll() {
-        return expenseRepository.findAllWithCategoryByUserId(DEMO_USER_ID);
+        UUID userId = currentUserProvider.getCurrentUser().getId();
+        return expenseRepository.findAllWithCategoryByUserId(userId);
     }
 
     public PagedResponse<ExpenseResponse> findAll(
@@ -44,11 +47,13 @@ public class ExpenseService {
     ) {
 
         Page<Expense> page;
+        UUID userId = currentUserProvider.getCurrentUser().getId();
+
 
         if (from != null && to != null) {
 
             page = expenseRepository.findByUserIdAndOccurredOnBetween(
-                    DEMO_USER_ID,
+                    userId,
                     from,
                     to,
                     pageable
@@ -57,18 +62,21 @@ public class ExpenseService {
         } else {
 
             page = expenseRepository.findByUserId(
-                    DEMO_USER_ID,
+                    userId,
                     pageable
             );
         }
 
         return PagedResponse.from(page, ExpenseResponse::from);
     }
+
     public Expense create(CreateExpenseRequest req) {
-        User user = userRepository.findById(DEMO_USER_ID).orElseThrow();
+        UUID userId = currentUserProvider.getCurrentUser().getId();
+
+        User user = userRepository.findById(userId).orElseThrow();
         Category category = null;
         if (req.categoryId() != null) {
-            category = categoryRepository.findByIdAndUserId(req.categoryId(), DEMO_USER_ID)
+            category = categoryRepository.findByIdAndUserId(req.categoryId(), userId)
                     .orElseThrow(() -> new ResourceNotFoundException("Category", req.categoryId()));
         }
 
@@ -76,31 +84,35 @@ public class ExpenseService {
         return expenseRepository.save(expense);
     }
 
-    public List<Expense> findExpensesBetween( LocalDate from, LocalDate to){
-       return expenseRepository.findByUserIdAndOccurredOnBetween(DEMO_USER_ID, from, to);
+    public List<Expense> findExpensesBetween(LocalDate from, LocalDate to) {
+        UUID userId = currentUserProvider.getCurrentUser().getId();
+
+        return expenseRepository.findByUserIdAndOccurredOnBetween(userId, from, to);
     }
 
     public BigDecimal getTotalSpent() {
-        return expenseRepository.totalSpentByUser(DEMO_USER_ID);
+        UUID userId = currentUserProvider.getCurrentUser().getId();
+        return expenseRepository.totalSpentByUser(userId);
     }
 
     public Expense findById(UUID id) {
+        UUID userId = currentUserProvider.getCurrentUser().getId();
         return expenseRepository
-                .findByIdAndUserId(id, DEMO_USER_ID)
+                .findByIdAndUserId(id, userId)
                 .orElseThrow(() -> new ResourceNotFoundException("Expense", id));
     }
 
     public Expense update(UUID id, UpdateExpenseRequest req) {
-
+        UUID userId = currentUserProvider.getCurrentUser().getId();
         Expense expense = expenseRepository
-                .findByIdAndUserId(id, DEMO_USER_ID)
+                .findByIdAndUserId(id, userId)
                 .orElseThrow(() -> new ResourceNotFoundException("Expense", id));
 
         Category category = null;
 
         if (req.categoryId() != null) {
             category = categoryRepository
-                    .findByIdAndUserId(req.categoryId(), DEMO_USER_ID)
+                    .findByIdAndUserId(req.categoryId(), userId)
                     .orElseThrow(() ->
                             new ResourceNotFoundException("Category", req.categoryId()));
         }
@@ -114,23 +126,25 @@ public class ExpenseService {
     }
 
     public void delete(UUID id) {
-
+        UUID userId = currentUserProvider.getCurrentUser().getId();
         Expense expense = expenseRepository
-                .findByIdAndUserId(id, DEMO_USER_ID)
+                .findByIdAndUserId(id, userId)
                 .orElseThrow(() -> new ResourceNotFoundException("Expense", id));
-
         expenseRepository.delete(expense);
     }
 
     public List<Object[]> findCategoriesWithTotalGreaterThan(BigDecimal min) {
+
         return expenseRepository.findCategoriesWithTotalGreaterThan(min);
     }
 
     public SummaryReportResponse getSummaryReport(
             LocalDate from,
             LocalDate to) {
+        UUID userId = currentUserProvider.getCurrentUser().getId();
 
-        return expenseRepository.getSummaryReport(DEMO_USER_ID,
+
+        return expenseRepository.getSummaryReport(userId,
                 from,
                 to
         );

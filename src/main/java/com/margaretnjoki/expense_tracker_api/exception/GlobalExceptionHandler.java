@@ -2,6 +2,7 @@ package com.margaretnjoki.expense_tracker_api.exception;
 
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,7 +33,7 @@ public class GlobalExceptionHandler {
         return Map.of("error", "validation failed", "message", ex.getMessage());
     }
 
-    @ExceptionHandler(BadRequestException.class)            // business rules
+    @ExceptionHandler(BadRequestException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Map<String, Object> handleBadRequest(BadRequestException ex) {
         return Map.of("error", ex.getMessage());
@@ -43,4 +44,11 @@ public class GlobalExceptionHandler {
     public Map<String, Object> handleEmailInUse(EmailAlreadyInUseException ex) {
         return Map.of("error", ex.getMessage());
     }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public Map<String, Object> handleBadCredentials(BadCredentialsException ex) {
+        return Map.of("error", "invalid email or password");
+    }
+
 }
