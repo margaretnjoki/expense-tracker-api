@@ -95,18 +95,19 @@ public class ExpenseService {
         return expenseRepository.totalSpentByUser(userId);
     }
 
-    public Expense findById(UUID id) {
+    private Expense findOwnedById(UUID id){
         UUID userId = currentUserProvider.getCurrentUser().getId();
-        return expenseRepository
-                .findByIdAndUserId(id, userId)
+        return expenseRepository.findByIdAndUserId(id, userId)
                 .orElseThrow(() -> new ResourceNotFoundException("Expense", id));
+    }
+
+    public Expense findById(UUID id) {
+        return findOwnedById(id);
     }
 
     public Expense update(UUID id, UpdateExpenseRequest req) {
         UUID userId = currentUserProvider.getCurrentUser().getId();
-        Expense expense = expenseRepository
-                .findByIdAndUserId(id, userId)
-                .orElseThrow(() -> new ResourceNotFoundException("Expense", id));
+        Expense expense = findOwnedById(id);
 
         Category category = null;
 
@@ -127,9 +128,7 @@ public class ExpenseService {
 
     public void delete(UUID id) {
         UUID userId = currentUserProvider.getCurrentUser().getId();
-        Expense expense = expenseRepository
-                .findByIdAndUserId(id, userId)
-                .orElseThrow(() -> new ResourceNotFoundException("Expense", id));
+        Expense expense = findOwnedById(id);
         expenseRepository.delete(expense);
     }
 

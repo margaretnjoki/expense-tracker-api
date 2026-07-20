@@ -6,6 +6,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
+import java.nio.file.AccessDeniedException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -50,5 +51,12 @@ public class GlobalExceptionHandler {
     public Map<String, Object> handleBadCredentials(BadCredentialsException ex) {
         return Map.of("error", "invalid email or password");
     }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public Map<String, Object> handleAccessDenied(AccessDeniedException ex) {
+        return Map.of("error", "you do not have permission to perform this action");
+    }
+
 
 }

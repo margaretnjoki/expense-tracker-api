@@ -26,7 +26,12 @@ private final CurrentUserProvider currentUserProvider;
         this.userRepository = userRepository;
         this.currentUserProvider = currentUserProvider;
     }
+private Category findOwnedById(UUID id){
+        UUID userId = currentUserProvider.getCurrentUser().getId();
+        return categoryRepository.findByIdAndUserId(id, userId)
+                .orElseThrow(() -> new ResourceNotFoundException("category", id));
 
+}
     public PagedResponse<CategoryResponse> findAll(Pageable pageable) {
         UUID userId= currentUserProvider.getCurrentUser().getId();
         Page<Category> page = categoryRepository.findByUserId(
@@ -38,9 +43,7 @@ private final CurrentUserProvider currentUserProvider;
     }
     public Category findById(UUID id){
         UUID userId= currentUserProvider.getCurrentUser().getId();
-
-        return categoryRepository.findByIdAndUserId(id,userId)
-                .orElseThrow(() -> new ResourceNotFoundException("category", id));
+        return findOwnedById(id);
     }
 
     public Category create(CreateCategoryRequest req){
@@ -55,7 +58,7 @@ private final CurrentUserProvider currentUserProvider;
     }
 
     public void delete(UUID id){
-        Category category=findById(id);
+        Category category=findOwnedById(id);
         categoryRepository.delete(category);
     }
 }

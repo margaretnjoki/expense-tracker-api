@@ -35,12 +35,19 @@ public class AuthController {
     }
     @PostMapping("/login")
     public LoginResponse login(@Valid @RequestBody LoginRequest request) {
+        System.out.println(">>> LOGIN START <<<");
+
 
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.email(), request.password())
         );
         String token = jwtService.generateToken(request.email());
         return new LoginResponse(token);
+    }
+
+    @GetMapping("/test")
+    public String test() {
+        return "Auth controller is working!";
     }
 
 }
