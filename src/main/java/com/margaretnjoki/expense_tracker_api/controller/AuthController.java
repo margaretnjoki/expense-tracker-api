@@ -7,11 +7,14 @@ import com.margaretnjoki.expense_tracker_api.dto.UserResponse;
 import com.margaretnjoki.expense_tracker_api.security.JwtService;
 import com.margaretnjoki.expense_tracker_api.service.AuthService;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
+
+@Slf4j
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
@@ -28,14 +31,14 @@ public class AuthController {
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
     public UserResponse register(@Valid @RequestBody RegisterRequest request){
-        System.out.println(">>> REGISTER ENDPOINT HIT <<<");
+        log.info(">>> REGISTER ENDPOINT HIT <<<");
 
         return UserResponse.from(authService.register(request));
 
     }
     @PostMapping("/login")
     public LoginResponse login(@Valid @RequestBody LoginRequest request) {
-        System.out.println(">>> LOGIN START <<<");
+        log.info(">>> LOGIN START <<<");
 
 
         authenticationManager.authenticate(

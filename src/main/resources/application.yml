@@ -1,6 +1,8 @@
 spring:
   application:
     name: expense-tracker-api
+  profiles:
+    active: dev
 
   data:
     web:
@@ -8,19 +10,9 @@ spring:
         default-page-size: 20
         max-page-size: 100
 
-  datasource:
-    url: jdbc:postgresql://localhost:5432/expense_db
-    username: postgres
-    password: postgres
-
   jpa:
     hibernate:
       ddl-auto: validate
-    show-sql: true
-    properties:
-      hibernate:
-        format_sql: true
-
   flyway:
     enabled: true
 
@@ -29,12 +21,8 @@ server:
   servlet:
     context-path: /api/v1
 
-jwt:
-  secret: "change-this-to-a-long-random-string-at-least-32-characters-please"
-  expiration-ms: 36600000
-
   logging:
     level:
-      org.springframework.security: DEBUG
+      root: INFO
 
 

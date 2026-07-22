@@ -4,12 +4,15 @@ import com.margaretnjoki.expense_tracker_api.dto.RegisterRequest;
 import com.margaretnjoki.expense_tracker_api.exception.EmailAlreadyInUseException;
 import com.margaretnjoki.expense_tracker_api.model.User;
 import com.margaretnjoki.expense_tracker_api.repository.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.UUID;
 
+
+@Slf4j
 @Service
 public class AuthService {
 
@@ -22,7 +25,9 @@ public class AuthService {
     }
 
     public User register(RegisterRequest request){
+        log.info("create user called");
         if (userRepository.findByEmail(request.email()).isPresent()){
+            log.warn("user with this email exists {}", request.email());
             throw new EmailAlreadyInUseException(request.email());
         }
         User user= User.builder()
@@ -31,6 +36,8 @@ public class AuthService {
                 .role("USER")
                 .createdAt(Instant.now())
                 .build();
-        return userRepository.save(user);
+        User savedUser = userRepository.save(user);
+        log.info("user created successfully id= {}",savedUser.getId());
+        return savedUser;
     }
 }

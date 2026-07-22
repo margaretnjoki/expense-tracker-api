@@ -1,0 +1,14 @@
+spring:
+  datasource:
+    url: ${DATABASE_URL}
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
+
+jwt:
+  secret: ${JWT_SECRET}
+  expiration-ms: 3600000
+
+logging:
+  level:
+    com.margaretnjoki.expensetracker: INFO
+    root: WARN

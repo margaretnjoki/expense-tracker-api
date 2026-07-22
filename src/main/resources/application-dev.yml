@@ -1,0 +1,14 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/expense_db
+    username: postgres
+    password: ${DB_PASSWORD:postgres}
+
+jwt:
+  secret: ${JWT_SECRET:dev-only-fallback-secret-not-for-production-use}
+  expiration-ms: 3600000
+
+logging:
+  level:
+    com.margaretnjoki.expensetracker: DEBUG
+    org.hibernate.SQL: DEBUG

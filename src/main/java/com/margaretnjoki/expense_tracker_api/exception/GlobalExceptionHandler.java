@@ -1,7 +1,9 @@
 package com.margaretnjoki.expense_tracker_api.exception;
 
 import jakarta.validation.ConstraintViolationException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
@@ -10,6 +12,7 @@ import java.nio.file.AccessDeniedException;
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -57,6 +60,9 @@ public class GlobalExceptionHandler {
     public Map<String, Object> handleAccessDenied(AccessDeniedException ex) {
         return Map.of("error", "you do not have permission to perform this action");
     }
-
-
+//    @ExceptionHandler(Exception.class)
+//    public ResponseEntity<Map<String, Object>> handleAny(Exception ex) {
+//        log.error("Unexpected error", ex);   // full stack trace goes to the LOG, never to the client
+//        return build(HttpStatus.INTERNAL_SERVER_ERROR, "unexpected server error");
+//    }
 }
