@@ -5,7 +5,7 @@ spring:
     password: ${DB_PASSWORD:postgres}
 
 jwt:
-  secret: ${JWT_SECRET:dev-only-fallback-secret-not-for-production-use}
+  secret: ${JWT_SECRET:mQ7vL9nP4xX2wR8kZ5aT3cF1hJ6sN0dE9yU2gV7bK4pR8wX1zC5nM6qH3tF9aL2s}
   expiration-ms: 3600000
 
 logging:

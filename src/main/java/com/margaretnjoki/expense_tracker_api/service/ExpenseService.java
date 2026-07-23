@@ -10,6 +10,7 @@ import com.margaretnjoki.expense_tracker_api.repository.CategoryRepository;
 import com.margaretnjoki.expense_tracker_api.repository.ExpenseRepository;
 import com.margaretnjoki.expense_tracker_api.repository.UserRepository;
 import com.margaretnjoki.expense_tracker_api.security.CurrentUserProvider;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -19,7 +20,7 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
-
+@Slf4j
 @Service
 public class ExpenseService {
 
@@ -71,6 +72,7 @@ public class ExpenseService {
     }
 
     public Expense create(CreateExpenseRequest req) {
+        log.info("create expense");
         UUID userId = currentUserProvider.getCurrentUser().getId();
 
         User user = userRepository.findById(userId).orElseThrow();
