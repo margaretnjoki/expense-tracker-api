@@ -9,8 +9,7 @@ public class ExpenseTrackerApiApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(ExpenseTrackerApiApplication.class, args);
-		log.info("Expense Tracker API Version 2.1 started");
-
+		log.info("Expense Tracker API Version 2.1 started at port 8081");
 	}
 
 }
