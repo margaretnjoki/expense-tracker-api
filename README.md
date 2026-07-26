@@ -174,15 +174,146 @@ into Postman to test all API endpoints.
 
 ---
 
-## Future Improvements
+## 🔐 JWT Authentication
 
-- JWT Authentication
-- Docker support
+This API uses **JSON Web Token (JWT)** authentication to secure protected endpoints.
+
+### Features
+- User registration with encrypted passwords using **BCrypt**
+- User login with JWT token generation
+- Stateless authentication
+- Role-based authorization (e.g., USER, ADMIN)
+- Protected endpoints using Spring Security
+- Configurable token expiration
+- JWT secret stored securely using environment variables
+
+### Authentication Flow
+
+1. Register a new user.
+2. Login using your email and password.
+3. Receive a JWT access token.
+4. Include the token in every protected request:
+
+```http
+Authorization: Bearer <your-jwt-token>
+```
+
+5. Spring Security validates the token before granting access.
+
+### Environment Variables
+
+The following environment variables are required:
+
+| Variable | Description |
+|----------|-------------|
+| `JWT_SECRET` | Secret key used to sign JWT tokens |
+| `JWT_EXPIRATION_MS` | Token expiration time in milliseconds |
+
+Example:
+
+```bash
+JWT_SECRET=your-super-secret-key-at-least-32-characters
+JWT_EXPIRATION_MS=3600000
+```
+
+---
+
+## 🐳 Docker Support
+
+The application is fully containerized using **Docker** and can be run alongside PostgreSQL using **Docker Compose**.
+
+### Services
+
+- **expense-tracker-api** – Spring Boot application
+- **postgres** – PostgreSQL database
+
+### Start the application
+
+```bash
+docker compose up --build
+```
+
+### Run in detached mode
+
+```bash
+docker compose up -d
+```
+
+### Stop the containers
+
+```bash
+docker compose down
+```
+
+### Rebuild after making changes
+
+```bash
+docker compose up --build
+```
+
+### View logs
+
+```bash
+docker compose logs -f
+```
+
+### Container Ports
+
+| Service | Port |
+|----------|------|
+| Spring Boot API | 8080 |
+| PostgreSQL | 5432 |
+
+### Environment Variables
+
+Docker Compose passes the required configuration through environment variables, including:
+
+- `SPRING_DATASOURCE_URL`
+- `SPRING_DATASOURCE_USERNAME`
+- `DB_PASSWORD`
+- `JWT_SECRET`
+- `SPRING_PROFILES_ACTIVE`
+
+### Benefits of Docker
+
+- Consistent development environment
+- Easy application deployment
+- Simplified dependency management
+- Isolated PostgreSQL database
+- One-command project startup
+- Eliminates "works on my machine" issues
+## 🌍 Live Demo
+
+The application is deployed on **Render** and is publicly accessible.
+
+### API Base URL
+
+```
+https://expense-tracker-api-di7u.onrender.com
+```
+
+### Swagger UI
+
+Explore and test the API using Swagger UI:
+
+```
+https://expense-tracker-api-di7u.onrender.com/api/v1/swagger-ui/index.html
+```
+
+
+
+### Cold Starts
+
+This project is hosted on the **Render Free** plan. If the service has been idle for a while, the first request may take **30–60 seconds** while the application starts up. After the initial request, subsequent requests should respond normally.
+
+If Swagger or an API endpoint appears slow on the first request, please wait for the service to wake up and then refresh the page.
+
+
+## Future Improvements
 - Unit and Integration Tests
 - CI/CD pipeline
 - Cloud deployment (Render/AWS)
 
----
 
 ## Author
 
