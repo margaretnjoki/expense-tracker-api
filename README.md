@@ -279,10 +279,10 @@ Docker Compose passes the required configuration through environment variables, 
 
 - Consistent development environment
 - Easy application deployment
-- Simplified dependency management
 - Isolated PostgreSQL database
 - One-command project startup
 - Eliminates "works on my machine" issues
+
 ## 🌍 Live Demo
 
 The application is deployed on **Render** and is publicly accessible.
