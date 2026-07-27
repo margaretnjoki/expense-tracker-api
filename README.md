@@ -1,4 +1,5 @@
 # Expense Tracker API
+[![CI](https://github.com/margaretnjoki/expense-tracker-api/actions/workflows/ci.yml/badge.svg)](https://github.com/margaretnjoki/expense-tracker-api/actions/workflows/ci.yml)
 
 A RESTful API for managing personal expenses and categories. Users can create categories, record expenses, filter expenses by date, and generate spending reports.
 
