@@ -5,6 +5,13 @@ spring:
     active: dev
 
   data:
+    data:
+      redis:
+        host: ${REDIS_HOST:localhost}
+        port: ${REDIS_PORT:6379}
+      cache:
+        type: redis
+
     web:
       pageable:
         default-page-size: 20

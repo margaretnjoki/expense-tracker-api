@@ -1,0 +1,18 @@
+package com.margaretnjoki.expense_tracker_api.service;
+
+import com.margaretnjoki.expense_tracker_api.repository.RefreshTokenRepository;
+import org.springframework.scheduling.annotation.Scheduled;
+
+import java.time.Instant;
+
+public class RefreshTokenCleanupService {
+    private final RefreshTokenRepository repository;
+
+    public RefreshTokenCleanupService(RefreshTokenRepository repository) {
+        this.repository = repository;
+    }
+    @Scheduled(cron = "0 0 0 * * *")
+    public void deleteExpiredRefreshTokens(){
+        repository.deleteExpiredTokens(Instant.now());
+    }
+}

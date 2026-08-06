@@ -18,10 +18,12 @@ public class AuthService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final NotificationService notificationService;
 
-    public AuthService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public AuthService(UserRepository userRepository, PasswordEncoder passwordEncoder, NotificationService notificationService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.notificationService = notificationService;
     }
 
     public User register(RegisterRequest request){
@@ -38,6 +40,7 @@ public class AuthService {
                 .build();
         User savedUser = userRepository.save(user);
         log.info("user created successfully id= {}",savedUser.getId());
+        notificationService.sendWelcomeNotification(savedUser.getEmail());
         return savedUser;
     }
 }
