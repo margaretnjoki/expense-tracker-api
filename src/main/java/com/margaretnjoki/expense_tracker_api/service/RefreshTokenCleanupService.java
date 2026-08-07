@@ -2,9 +2,10 @@ package com.margaretnjoki.expense_tracker_api.service;
 
 import com.margaretnjoki.expense_tracker_api.repository.RefreshTokenRepository;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 
 import java.time.Instant;
-
+@Component
 public class RefreshTokenCleanupService {
     private final RefreshTokenRepository repository;
 
